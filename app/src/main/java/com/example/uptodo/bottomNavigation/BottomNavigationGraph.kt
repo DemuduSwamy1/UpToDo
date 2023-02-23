@@ -1,16 +1,20 @@
-package com.example.uptodo.BottomNavigation
+package com.example.uptodo.bottomNavigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.mybottomnavigation.BottomNavItem
 import com.example.uptodo.IndexScreen
-import com.example.uptodo.Navigation.Screen
-import com.example.uptodo.OnBoardingScreens.SettingsScreen
-import com.example.uptodo.Screens.ProfileScreen
+import com.example.uptodo.navigation.Screen
+import com.example.uptodo.onBoardingScreens.SettingsScreen
+import com.example.uptodo.screens.CalendarScreen
+import com.example.uptodo.screens.ProfileScreen
 import com.example.uptodo.TasksDataViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BottomNavigationGraph(
     navBarController: NavHostController,
@@ -22,7 +26,7 @@ fun BottomNavigationGraph(
             IndexScreen(navController = navBarController, tasksDataViewModel = tasksDataViewModel)
         }
         composable(BottomNavItem.Calendar.screen_route) {
-            NetworkScreen()
+            CalendarScreen()
         }
         composable(BottomNavItem.AddTask.screen_route) {
             NotificationScreen()

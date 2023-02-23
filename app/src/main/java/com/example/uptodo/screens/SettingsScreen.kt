@@ -1,4 +1,4 @@
-package com.example.uptodo.OnBoardingScreens
+package com.example.uptodo.onBoardingScreens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.uptodo.R
-import com.example.uptodo.Screens.SetSettingsOptionsItem
+import com.example.uptodo.screens.SetSettingsOptionsItem
 
 data class AppSettingsOptions(val icon: Int, val text: String)
 data class ImportOptions(val icon: Int, val text: String)

@@ -1,8 +1,7 @@
-package com.example.uptodo.Dialogues
+package com.example.uptodo.dialogues
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,31 +12,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import com.example.uptodo.onBoardingScreens.TitleAndEditTextField
 
 @Composable
-fun ChangeAccountNameDialog(setChangeAccountNameDialog: (Boolean) -> Unit) {
-    Dialog(onDismissRequest = { setChangeAccountNameDialog(false) }) {
+fun ChangePasswordDialog(setChangepasswordDialog: (Boolean) -> Unit) {
+    Dialog(
+        onDismissRequest = { setChangepasswordDialog(false) },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
+    ) {
         Surface(
             color = Color(0xFF363636),
             shape = RoundedCornerShape(10.dp),
@@ -50,7 +46,7 @@ fun ChangeAccountNameDialog(setChangeAccountNameDialog: (Boolean) -> Unit) {
                     .padding(10.dp)
             ) {
                 Text(
-                    text = "Change account name",
+                    text = "Change account Password",
                     fontSize = 16.sp,
                     color = Color(0xdeffffff),
                     modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -62,29 +58,34 @@ fun ChangeAccountNameDialog(setChangeAccountNameDialog: (Boolean) -> Unit) {
                         .fillMaxSize()
                         .background(Color(0xFF979797))
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(9.dp))
+                Column(modifier = Modifier.padding(horizontal = 10.dp)) {
+                    TitleAndEditTextField(
+                        title = "Enter old password",
+                        placeHolder = "• • • • • • • • • • ",
+                        textFieldColour = Color.Transparent,
+                        keyboardType = KeyboardType.Password
+                    ) {
+                        val value = it
+                    }
 
-                var name by remember { mutableStateOf(TextFieldValue("Martha Hays")) }
-                TextField(
-                    value = name, onValueChange = { newName ->
-                        name = newName
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp)
-                        .padding(horizontal = 10.dp)
-                        .background(Color(0xFF363636))
-                        .border(1.dp, color = Color(0xFF979797)),
-                    colors = TextFieldDefaults.textFieldColors(Color(0xdeffffff)),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-                )
+                    Spacer(modifier = Modifier.height(10.dp))
 
+                    TitleAndEditTextField(
+                        title = "Enter new password",
+                        placeHolder = "• • • • • • • • • • ",
+                        textFieldColour = Color.Transparent,
+                        keyboardType = KeyboardType.Password
+                    ) {
+                        val value = it
+                    }
 
-                Spacer(modifier = Modifier.height(28.dp))
-
+                }
+                Spacer(modifier = Modifier.height(37.dp))
 
                 Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
-                        onClick = { setChangeAccountNameDialog(false) },
+                        onClick = { setChangepasswordDialog(false) },
                         modifier = Modifier
                             .height(48.dp)
                             .weight(1f),

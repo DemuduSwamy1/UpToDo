@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.uptodo.OnBoardingScreens.TitleAndEditTextField
+import com.example.uptodo.onBoardingScreens.TitleAndEditTextField
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -38,7 +38,11 @@ fun CreateNewCategoryDialog(
 ) {
     Dialog(
         onDismissRequest = { setNewCatgoryShowDialog(false) },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnClickOutside = false,
+            dismissOnBackPress = true
+        )
     ) {
         Scaffold() {
             Column(

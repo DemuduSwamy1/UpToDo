@@ -1,19 +1,27 @@
 package com.example.uptodo
 
+import DataStoreManager
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -21,27 +29,52 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mybottomnavigation.BottomNavItem
-import com.example.uptodo.BottomNavigation.BottomNavigationGraph
-import com.example.uptodo.Dialogues.AddTaskDialog
-
-import com.example.uptodo.Navigation.SetUpNavGraph
+import com.example.uptodo.bottomNavigation.BottomNavigationGraph
+import com.example.uptodo.dialogues.AddTaskDialog
+import com.example.uptodo.navigation.Screen
+import com.example.uptodo.navigation.SetUpNavGraph
 import com.example.uptodo.ui.theme.UpToDoTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
+    lateinit var dataStoreManager: DataStoreManager
     lateinit var navController: NavHostController
     lateinit var tasksDataViewModel: TasksDataViewModel
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             UpToDoTheme {
                 SetStatusBarColour(Color(0xFF121212))
-                navController = rememberNavController()
                 tasksDataViewModel = TasksDataViewModel()
+                navController = rememberNavController()
+                val scope = rememberCoroutineScope()
+                val context = LocalContext.current
+                dataStoreManager = DataStoreManager(context)
+//                val database = Firebase.database.reference
                 SetUpNavGraph(
                     navController = navController,
-                    tasksDataViewModel = tasksDataViewModel
+                    tasksDataViewModel = tasksDataViewModel,
+                    context = context,
+                    dataStoreManager = dataStoreManager,
+                    scope = scope,
                 )
+                val dataStoreManager = DataStoreManager(context = context)
+                val uid = dataStoreManager.uid.collectAsState(initial = "").value
+                val email = dataStoreManager.email.collectAsState(initial = "").value
+                tasksDataViewModel.userUid.value = uid
+                tasksDataViewModel.userEmail.value = email
+                if (email.isEmpty()) {
+                    Log.d("dataStore_02", email)
+                    Log.d("dataStore_03", uid)
+                    navController.navigate(Screen.OnBoardingScreen.route)
+                } else {
+                    Log.d("dataStore_04", email)
+                    Log.d("dataStore_05", uid)
+                    navController.navigate(Screen.DashBoardScreen.route)
+                }
+
             }
         }
     }
@@ -68,15 +101,20 @@ fun SetStatusBarColour(bottomNavbarColour: Color) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DashBoardScreen(tasksDataViewModel: TasksDataViewModel) {
+fun DashBoardScreen(tasksDataViewModel: TasksDataViewModel, context: Context) {
     val navBarController = rememberNavController()
 
     val showAddTaskDialog = remember { mutableStateOf(false) }
 
     if (showAddTaskDialog.value) {
-        AddTaskDialog(tasksDataViewModel = tasksDataViewModel, navController = navBarController) {
+        AddTaskDialog(
+            context = context,
+            tasksDataViewModel = tasksDataViewModel,
+            navController = navBarController
+        ) {
             showAddTaskDialog.value = it
         }
     }
@@ -232,7 +270,6 @@ fun BottomNavigation(navController: NavController) {
                     launchSingleTop = true
                     restoreState = true
                 }
-
             }
         )
         // Profile tab

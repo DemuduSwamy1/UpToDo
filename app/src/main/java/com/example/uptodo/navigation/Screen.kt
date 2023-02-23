@@ -1,7 +1,7 @@
-package com.example.uptodo.Navigation
+package com.example.uptodo.navigation
 
 sealed class Screen(val route: String){
-object OnoardingScreen:Screen(route = "onboarding_screen")
+object OnBoardingScreen:Screen(route = "onboarding_screen")
 object FirstIntroScreen:Screen(route = "first_intro_screen")
 object SecondIntroScreen:Screen(route = "second_intro_screen")
 object ThirdIntroScreen:Screen(route = "third_intro_screen")

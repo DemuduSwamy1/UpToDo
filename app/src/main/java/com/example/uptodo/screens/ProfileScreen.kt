@@ -1,4 +1,4 @@
-package com.example.uptodo.Screens
+package com.example.uptodo.screens
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -37,15 +37,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.example.uptodo.Dialogues.ChangeAccountNameDialog
-import com.example.uptodo.Dialogues.ChangePasswordDialog
-import com.example.uptodo.Navigation.Screen
+import com.example.uptodo.dialogues.ChangeAccountNameDialog
+import com.example.uptodo.dialogues.ChangePasswordDialog
+import com.example.uptodo.navigation.Screen
 import com.example.uptodo.R
 import com.example.uptodo.TasksDataViewModel
 
@@ -194,7 +196,8 @@ fun SetProfileContent(tasksDataViewModel: TasksDataViewModel) {
             contentDescription = null,
             modifier = Modifier
                 .clip(CircleShape)
-                .size(85.dp)
+                .size(85.dp),
+            contentScale = ContentScale.FillBounds
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Martha Hays", color = Color(0xdeffffff), fontSize = 20.sp)
@@ -243,7 +246,10 @@ fun ChangeProfileDialog(
         tasksDataViewModel.profilePicture.value = uri
         setChangeProfileDialog(false)
     }
-    Dialog(onDismissRequest = { setChangeProfileDialog(false) }) {
+    Dialog(
+        onDismissRequest = { setChangeProfileDialog(false) },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
+    ) {
         Surface(
             color = Color(0xFF363636),
             shape = RoundedCornerShape(10.dp),

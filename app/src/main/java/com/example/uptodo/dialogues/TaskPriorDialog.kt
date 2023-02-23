@@ -1,4 +1,4 @@
-package com.example.uptodo.Dialogues
+package com.example.uptodo.dialogues
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -34,6 +34,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.uptodo.R
 
 @Composable
@@ -41,7 +42,10 @@ fun TaskPriorityDialog(
     setPriorityShowDialog: (Boolean) -> Unit,
     priority: (Int) -> Unit,
 ) {
-    Dialog(onDismissRequest = { setPriorityShowDialog(false) }) {
+    Dialog(
+        onDismissRequest = { setPriorityShowDialog(false) },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
+    ) {
         Surface(
             color = Color(0xFF363636),
             shape = RoundedCornerShape(10.dp),

@@ -1,16 +1,12 @@
-package com.example.uptodo.BottomNavigation
+package com.example.uptodo.bottomNavigation
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -21,9 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import java.util.Calendar
 import java.util.Date
 
@@ -132,8 +128,11 @@ fun JobScreen() {
 }
 
 @Composable
-fun CalendarDialog(setCalendarDialog:(Boolean)->Unit){
-    Dialog(onDismissRequest = {setCalendarDialog(false)}) {
+fun CalendarDialog(setCalendarDialog: (Boolean) -> Unit) {
+    Dialog(
+        onDismissRequest = { setCalendarDialog(false) },
+        properties = DialogProperties(dismissOnClickOutside = false, dismissOnBackPress = true)
+    ) {
         // Fetching the Local Context
         val mContext = LocalContext.current
 

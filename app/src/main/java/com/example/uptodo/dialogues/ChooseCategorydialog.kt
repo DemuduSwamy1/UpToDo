@@ -1,4 +1,4 @@
-package com.example.uptodo.Dialogues
+package com.example.uptodo.dialogues
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,17 +29,18 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
+import com.example.uptodo.CategoryItem
 import com.example.uptodo.TasksDataViewModel
 import com.example.uptodo.ui.theme.CreateNewCategoryDialog
 
-data class CategotyItem(val image: Int, val text: String, val color: Color)
 
 @Composable
 fun ChooseCategoryDialog(
     navController: NavController,
     setCategoryShowDialog: (Boolean) -> Unit,
-    categotyItem: (CategotyItem) -> Unit,
+    categotyItem: (CategoryItem) -> Unit,
     tasksDataViewModel: TasksDataViewModel
 ) {
     val showNewCategoryDialog = remember {
@@ -52,7 +53,10 @@ fun ChooseCategoryDialog(
             })
     }
     val categoryItems = tasksDataViewModel.categoryItems
-    Dialog(onDismissRequest = { setCategoryShowDialog(false) }) {
+    Dialog(
+        onDismissRequest = { setCategoryShowDialog(false) },
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = false)
+    ) {
         Surface(
             color = Color(0xFF363636),
             shape = RoundedCornerShape(10.dp),
@@ -82,50 +86,26 @@ fun ChooseCategoryDialog(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    categoryItems[0].color?.let {
+                        CategoryItemUI(
+                            categoryItems[0].image ?: 0,
+                            categoryItems[0].text ?: "",
+                            it
+                        ) {
+                            categotyItem(it)
+                        }
+                    }
                     CategoryItemUI(
-                        categoryItems[0].image,
-                        categoryItems[0].text,
-                        categoryItems[0].color
+                        categoryItems[1].image ?: 0,
+                        categoryItems[1].text ?: "",
+                        categoryItems[1].color!!
                     ) {
                         categotyItem(it)
                     }
                     CategoryItemUI(
-                        categoryItems[1].image,
-                        categoryItems[1].text,
-                        categoryItems[1].color
-                    ) {
-                        categotyItem(it)
-                    }
-                    CategoryItemUI(
-                        categoryItems[2].image,
-                        categoryItems[2].text,
-                        categoryItems[2].color
-                    ) {
-                        categotyItem(it)
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    CategoryItemUI(
-                        categoryItems[3].image,
-                        categoryItems[3].text, categoryItems[3].color
-                    ) {
-                        categotyItem(it)
-                    }
-                    CategoryItemUI(
-                        categoryItems[4].image,
-                        categoryItems[4].text,
-                        categoryItems[4].color
-                    ) {
-                        categotyItem(it)
-                    }
-                    CategoryItemUI(
-                        categoryItems[5].image,
-                        categoryItems[5].text,
-                        categoryItems[5].color
+                        categoryItems[2].image ?: 0,
+                        categoryItems[2].text ?: "",
+                        categoryItems[2].color!!
                     ) {
                         categotyItem(it)
                     }
@@ -136,23 +116,49 @@ fun ChooseCategoryDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CategoryItemUI(
-                        categoryItems[6].image,
-                        categoryItems[6].text,
-                        categoryItems[6].color
+                        categoryItems[3].image ?: 0,
+                        categoryItems[3].text ?: "", categoryItems[3].color!!
                     ) {
                         categotyItem(it)
                     }
                     CategoryItemUI(
-                        categoryItems[7].image,
-                        categoryItems[7].text,
-                        categoryItems[7].color
+                        categoryItems[4].image ?: 0,
+                        categoryItems[4].text ?: "",
+                        categoryItems[4].color!!
                     ) {
                         categotyItem(it)
                     }
                     CategoryItemUI(
-                        categoryItems[8].image,
-                        categoryItems[8].text,
-                        categoryItems[8].color
+                        categoryItems[5].image ?: 0,
+                        categoryItems[5].text ?: "",
+                        categoryItems[5].color!!
+                    ) {
+                        categotyItem(it)
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    CategoryItemUI(
+                        categoryItems[6].image ?: 0,
+                        categoryItems[6].text ?: "",
+                        categoryItems[6].color!!
+                    ) {
+                        categotyItem(it)
+                    }
+                    CategoryItemUI(
+                        categoryItems[7].image ?: 0,
+                        categoryItems[7].text ?: "",
+                        categoryItems[7].color!!
+                    ) {
+                        categotyItem(it)
+                    }
+                    CategoryItemUI(
+                        categoryItems[8].image ?: 0,
+                        categoryItems[8].text ?: "",
+                        categoryItems[8].color!!
                     ) {
                         categotyItem(it)
                     }
@@ -162,17 +168,17 @@ fun ChooseCategoryDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     CategoryItemUI(
-                        categoryItems[9].image,
-                        categoryItems[9].text,
-                        categoryItems[9].color
+                        categoryItems[9].image ?: 0,
+                        categoryItems[9].text ?: "",
+                        categoryItems[9].color!!
                     ) {
                         categotyItem(it)
                     }
                     Spacer(modifier = Modifier.width(49.dp))
                     CategoryItemUI(
-                        categoryItems[10].image,
-                        categoryItems[10].text,
-                        categoryItems[10].color
+                        categoryItems[10].image ?: 0,
+                        categoryItems[10].text ?: "",
+                        categoryItems[10].color!!
                     ) {
                         showNewCategoryDialog.value = true
                     }
@@ -199,10 +205,10 @@ fun CategoryItemUI(
     categoryImage: Int,
     categoryName: String,
     color: Color,
-    categoryImageValue: (CategotyItem) -> Unit,
+    categoryImageValue: (CategoryItem) -> Unit,
 ) {
     Column(modifier = Modifier.clickable(onClick = {
-        categoryImageValue.invoke(CategotyItem(categoryImage, categoryName, color))
+        categoryImageValue.invoke(CategoryItem(categoryImage, categoryName, color))
     }), horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
             imageVector = ImageVector.vectorResource(id = categoryImage),

@@ -1,5 +1,8 @@
-package com.example.uptodo.OnBoardingScreens
+package com.example.uptodo.onBoardingScreens
 
+import DataStoreManager
+import UserDetail
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,11 +41,23 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.uptodo.Navigation.Screen
+import com.example.uptodo.navigation.Screen
 import com.example.uptodo.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, context: Context, scope: CoroutineScope) {
+    val dataStoreManager =  DataStoreManager(context = context)
+    var userName by remember {
+        mutableStateOf(String())
+    }
+    var password by remember {
+        mutableStateOf(String())
+    }
     Scaffold {
         Column(
             modifier = Modifier
@@ -73,7 +88,7 @@ fun LoginScreen(navController: NavHostController) {
                     textFieldColour = Color(0xff1d1d1d),
                     keyboardType = KeyboardType.Text
                 ) {
-                    val value = it
+                    userName = it
                 }
 
                 Spacer(modifier = Modifier.height(25.dp))
@@ -84,12 +99,16 @@ fun LoginScreen(navController: NavHostController) {
                     textFieldColour = Color(0xff1d1d1d),
                     keyboardType = KeyboardType.Password
                 ) {
-                    val value = it
+                    password = it
                 }
 
                 Spacer(modifier = Modifier.height(60.dp))
                 Button(
-                    onClick = { navController.navigate(Screen.DashBoardScreen.route) },
+                    onClick = {
+                        scope.launch {
+                            dataStoreManager.saveToDataStore(UserDetail(userName))
+                        }
+                        navController.navigate(Screen.DashBoardScreen.route) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp),
@@ -99,7 +118,7 @@ fun LoginScreen(navController: NavHostController) {
                 }
                 Spacer(modifier = Modifier.height(35.dp))
 
-                CustomDevider()
+                CustomDivider()
 
                 Spacer(modifier = Modifier.height(35.dp))
 
@@ -146,6 +165,7 @@ fun TitleAndEditTextField(
         .height(52.dp)
         .background(textFieldColour)
         .border(1.dp, color = Color(0xFF979797)),
+        singleLine = true,
         colors = TextFieldDefaults.textFieldColors(Color(0xffffffff)),
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
